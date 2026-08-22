@@ -1,0 +1,23 @@
+const express = require('express')
+const connectDB = require ('./src/db/db')
+const cookiesParser = require('cookie-parser')
+const route = require('./src/routes/auth.route')
+
+require('dotenv').config()
+
+const app = express()
+connectDB()
+
+app.use(express.json())
+app.use(cookiesParser())
+app.use(express.urlencoded({extended:true ,limit:"16kb"}))
+app.use(express.static("public"))
+
+app.use("/api/auth" , route)
+
+
+app.get("/" , (req , res) =>{
+    res.send(`Hello Nikhil`)
+})
+
+module.exports= app
