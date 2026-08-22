@@ -1,6 +1,5 @@
 const Teacher = require("../models/teacher.model");
 
-
 const setupTeacherProfile = async (req, res) => {
   try {
     const {
@@ -93,6 +92,64 @@ const setupTeacherProfile = async (req, res) => {
   }
 };
 
+const updateTeacherProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      name,
+      email,
+      phone,
+      employeeId,
+      gender,
+      dateOfBirth,
+      department,
+      designation,
+      qualification,
+      experience,
+      subjects,
+      address,
+      city,
+      state,
+      pincode,
+      joiningDate,
+      profileImage,
+    } = req.body;
+
+    const teacher = await Teacher.findById(id);
+
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        message: "Teacher not found",
+      });
+    }
+
+    const updatedTeacher = await Teacher.findByIdAndUpdate(
+      id,
+      { $set: req.body },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Teacher profile updated successfully",
+      teacher: updatedTeacher,
+    });
+  } catch (error) {
+    console.error("Update teacher profile error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   setupTeacherProfile,
+  updateTeacherProfile,
 };
