@@ -7,6 +7,8 @@ import { useNavigate } from "react-router";
 const Register = () => {
   const navigate = useNavigate();
 
+  const [registerError, setRegisterError] = useState()
+
   const {
     register,
     handleSubmit,
@@ -24,15 +26,11 @@ const Register = () => {
   });
 
   const onSubmit = async (data) => {
+
+     console.log(data)
     try {
       // 👇 apna backend endpoint yahan daalo (port + route mentor ne jo diya hai)
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
-        fullName: data.fullName,
-        email: data.email,
-        phone: data.phone,
-        password: data.password,
-        role: data.role,
-      });
+      const res = await axios.post("http://localhost:4000/api/auth/register", data );
 
       console.log("Registered:", res.data);
       navigate("/login"); // signup ke baad login page pe bhej do
